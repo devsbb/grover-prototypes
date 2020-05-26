@@ -12,7 +12,7 @@ run ```lerna bootstrap```
 
 ## Built With
 
-* [Lerna](https://github.com/lerna/lerna/) - Database and authentication;
+* [Lerna](https://github.com/lerna/lerna/)
 
 ## Contributing
 
