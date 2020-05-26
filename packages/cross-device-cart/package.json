@@ -1,0 +1,41 @@
+{
+  "name": "cross-device-cart",
+  "private": true,
+  "description": "A prototype for cross device cart",
+  "version": "1.0.0",
+  "author": "Tkach <dan7tkach@gmail.com>",
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "core-js": "^2.6.5",
+    "firebase": "^6.0.2",
+    "gatsby": "^2.21.22",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "prettier": "2.0.5"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "deploy": "yarn build && firebase deploy",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  }
+}
