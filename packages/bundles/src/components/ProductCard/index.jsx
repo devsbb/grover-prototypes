@@ -1,11 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import { CartContext } from "../../CartContext/CartContext.js";
 
 import { Wrap, Title, PlanText, PlanSelector, Plan, Cta } from "./styles";
 
 export default () => {
-  const { mainProduct, activePlanIndex, setActivePlanIndex } = useContext(CartContext);
+  const {
+    mainProduct,
+    activePlanIndex,
+    setActivePlanIndex,
+    addToCart,
+    cart,
+  } = useContext(CartContext);
+  console.log("cart", cart);
   return (
     <Wrap>
       <Title>{mainProduct.title}</Title>
@@ -22,7 +29,17 @@ export default () => {
           </Plan>
         ))}
       </PlanSelector>
-      <Cta>add to cart</Cta>
+      <Cta
+        onClick={() =>
+          addToCart({
+            productName: mainProduct.title,
+            id: mainProduct.id,
+            planLength: mainProduct.plans[activePlanIndex],
+          })
+        }
+      >
+        add to cart
+      </Cta>
     </Wrap>
   );
 };

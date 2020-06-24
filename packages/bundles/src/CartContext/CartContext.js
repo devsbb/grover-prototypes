@@ -4,7 +4,7 @@ const CartContext = React.createContext({});
 
 const CartProvider = ({children}) => {
   const [activePlanIndex, setActivePlanIndex] = useState(0);
-  const [cart, setCart] = useState({});
+  const [cart, setCart] = useState([]);
   const bundleProduct = {
     title: 'Bundle Product',
     id: 2345,
@@ -18,8 +18,10 @@ const CartProvider = ({children}) => {
     bundleProducts: [ bundleProduct ]
   };
 
+  const addToCart = ({productName, id, planLength})=> setCart([...cart, {productName, id, planLength}])
+
   return (
-    <CartContext.Provider value={{mainProduct, cart, setCart, activePlanIndex, setActivePlanIndex}}>
+    <CartContext.Provider value={{mainProduct, cart, setCart, activePlanIndex, setActivePlanIndex, addToCart}}>
       {children}
     </CartContext.Provider>
   );
