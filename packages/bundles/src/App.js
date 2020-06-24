@@ -1,10 +1,20 @@
 import React from "react";
-import { Button } from './styles';
+
+import CartSummary from "./components/CartSummary";
+import ProductCard from "./components/ProductCard";
+import BundleBanner from "./components/BundleBanner";
+import { CartProvider } from './CartContext/CartContext';
+
+import { Wrap, TopWrap } from './styles';
 
 export default () => (
-  <>
-    <h1>Welcome to React Parcel Micro App!</h1>
-    <p>Hard to get more minimal than this React app.</p>
-    <Button>lovely button</Button>
-  </>
+  <CartProvider>
+    <Wrap>
+      <TopWrap>
+        <CartSummary />
+        <ProductCard />
+      </TopWrap>
+      <BundleBanner />
+    </Wrap>
+  </CartProvider>
 );
