@@ -6,6 +6,7 @@ import { Wrap, Title, PlanId, PlanSelector, Plan, Cta } from "./styles";
 
 export default () => {
   const { cart } = useContext(CartContext);
+  console.log('cart', cart)
   return (
     <Wrap>
       <Title>Your Cart: </Title>
@@ -13,7 +14,7 @@ export default () => {
       {!!cart.length &&
         cart.map((product) => (
           <div>
-            <p>Product ID: {product.productName}</p>
+            <p>Product ID: {product.title}</p>
             <p>Product ID: {product.id}</p>
             <p>Plan Legnth: {product.planLength}</p>
           </div>

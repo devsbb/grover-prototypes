@@ -12,7 +12,6 @@ export default () => {
     addToCart,
     cart,
   } = useContext(CartContext);
-  console.log("cart", cart);
   return (
     <Wrap>
       <Title>{mainProduct.title}</Title>
@@ -32,9 +31,8 @@ export default () => {
       <Cta
         onClick={() =>
           addToCart({
-            productName: mainProduct.title,
-            id: mainProduct.id,
-            planLength: mainProduct.plans[activePlanIndex],
+            products: [mainProduct],
+            planLength: mainProduct.plans[activePlanIndex]
           })
         }
       >

@@ -18,7 +18,13 @@ const CartProvider = ({children}) => {
     bundleProducts: [ bundleProduct ]
   };
 
-  const addToCart = ({productName, id, planLength})=> setCart([...cart, {productName, id, planLength}])
+  const addToCart = ({products, planLength})=> {
+    const productsWithPlan = products.map(product => ({
+      ...product,
+      planLength
+    }))
+    setCart([...cart, ...productsWithPlan])
+  }
 
   return (
     <CartContext.Provider value={{mainProduct, cart, setCart, activePlanIndex, setActivePlanIndex, addToCart}}>
