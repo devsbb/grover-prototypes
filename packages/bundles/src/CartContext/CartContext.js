@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 
-const CartContext = React.createContext();
+const CartContext = React.createContext({});
 
 const CartProvider = ({children}) => {
-
-  const [cart, setCart] = useState([123,123,123]);
-
+  const [activePlanIndex, setActivePlanIndex] = useState(0);
+  const [cart, setCart] = useState({});
   const bundleProduct = {
     title: 'Bundle Product',
     id: 2345,
     plans: [1,3,6,9,12],
     bundleProducts: null,
   };
-
   const mainProduct = {
     title: 'Main Product',
     id: 1234,
@@ -21,7 +19,7 @@ const CartProvider = ({children}) => {
   };
 
   return (
-    <CartContext.Provider value={[mainProduct, cart, setCart]}>
+    <CartContext.Provider value={{mainProduct, cart, setCart, activePlanIndex, setActivePlanIndex}}>
       {children}
     </CartContext.Provider>
   );
