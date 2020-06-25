@@ -4,6 +4,7 @@ This project was built to store some amazing ideas for grover :)
 
 ## List of prototypes
 * [Cross device cart](https://github.com/devsbb/grover-prototypes/tree/master/packages/cross-device-cart)
+* [Product Bundles](https://github.com/devsbb/grover-prototypes/tree/master/packages/bundles)
 
 ## Getting Started
 run ```yarn```
