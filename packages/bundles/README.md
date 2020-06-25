@@ -1,5 +1,5 @@
-# Cross device cart prototype
-https://cross-device-cart.web.app
+# Bundles Prototype
+
 
 Prototype for the product bundles feature
 
