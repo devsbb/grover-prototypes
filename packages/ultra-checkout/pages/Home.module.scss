@@ -1,0 +1,11 @@
+.container {
+  padding: 3vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
