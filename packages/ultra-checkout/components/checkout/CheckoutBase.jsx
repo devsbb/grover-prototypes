@@ -3,6 +3,7 @@ import { ShippingAddress } from './ShippingAddress';
 import { Payment } from './Payment';
 import { Review } from './Review';
 import { Summary } from './Summary';
+import { ScaffoldBlinkGrid } from '../brutalism/Scaffold';
 
 const sendUpdate = (step, send) => {
   return {
@@ -15,8 +16,10 @@ export const CheckoutBase = ({ current, send }) => (
   <>
     <h2>Checkout</h2>
     <section>
-      <button onClick={() => send('STEP_BACK')}>Step back!</button>
-      <button onClick={() => send('STEP_CHANGE')}>Step!</button>
+      <ScaffoldBlinkGrid>
+        <button onClick={() => send('STEP_BACK')}>Step back!</button>
+        <button onClick={() => send('STEP_CHANGE')}>Step!</button>
+      </ScaffoldBlinkGrid>
       {current.matches('idle') && <div>Idling...</div>}
       {current.matches('homeAddress') && (
         <HomeAddress

@@ -1,3 +1,5 @@
+import { Step } from '../../flow/CartContext';
+
 export const HomeAddress = ({ data, send, sendUpdate }) => {
   console.log({ data });
   const { update } = sendUpdate('homeAddress', send);
@@ -23,6 +25,9 @@ export const HomeAddress = ({ data, send, sendUpdate }) => {
             onChange={(e) => update('line1', e)}
           />
         </label>
+        <Step>
+          <strong>Mr F!</strong>
+        </Step>
       </form>
     </div>
   );

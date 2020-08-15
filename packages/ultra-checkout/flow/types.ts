@@ -9,13 +9,15 @@ export enum Step {
 export type Address = {};
 export type PaymentMethod = {};
 
-export interface CheckoutContext {
+export interface AuthValues {
   auth: any;
   user: any;
-  order: CartContext;
+}
+export interface CheckoutValues extends AuthValues {
+  order: CartValues;
 }
 
-export interface CartContext {
+export interface CartValues {
   orderNumber: string;
   guestToken: string;
   shippingAddress?: Address;

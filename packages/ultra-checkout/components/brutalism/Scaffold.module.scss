@@ -3,9 +3,25 @@
   padding: 14px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 20px;
+  label {
+    display: block;
+    margin-bottom: 12px;
+  }
+  input {
+    display: block;
+    margin-top: 4px;
+  }
 }
 
 .blinker {
   border: 2px solid #ff0000;
+}
+
+.grid {
+  padding: 12px;
+  margin: 6px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 12px;
 }
