@@ -1,5 +1,6 @@
 import { Machine, assign } from 'xstate';
 import { CheckoutValues, CartValues } from './types';
+import { CheckoutApi, ApiAccessor } from './api';
 
 export const createCheckoutMachine = (order: CartValues) => {
   return Machine<CheckoutValues>(
@@ -10,6 +11,15 @@ export const createCheckoutMachine = (order: CartValues) => {
         order,
       },
       on: {
+        submit: {
+          actions: assign((context, event) => {
+            const value: ApiAccessor = event.value;
+            const { payload, operation, entity } = value;
+
+            CheckoutApi[entity][operation](payload).then((e) => console.log(e));
+            return context;
+          }),
+        },
         update: {
           actions: assign({
             order: (ctx, e) => {
