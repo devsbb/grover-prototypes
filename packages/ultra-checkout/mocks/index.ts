@@ -51,7 +51,7 @@ const MixCart = {
 };
 
 async function getCart({ userId }: { userId: number }): Promise<CartValues> {
-  return Promise.resolve({ ...Order, userId });
+  return Promise.resolve({ ...Order, userId, paymentMethod: { id: '123' } });
 }
 
 async function createOrder(): Promise<CartValues> {
@@ -87,6 +87,9 @@ export const createMixCart = async ({
 }): Promise<CartValues> => {
   return {
     ...MixCart,
+    shippingAddress: {
+      city: 'Belgrade',
+    },
     lineItems: swap ? LineItems.slice(1) : LineItems.slice(2),
   };
 };

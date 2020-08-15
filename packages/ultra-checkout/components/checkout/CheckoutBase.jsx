@@ -51,7 +51,13 @@ export const CheckoutBase = ({ checkout, children }) => {
         />
       )}
       {current.matches('payment') && <Payment />}
-      {current.matches('review') && <Review />}
+      {current.matches('review') && (
+        <Review
+          sendUpdate={sendUpdate}
+          data={current.context.order}
+          send={send}
+        />
+      )}
       {current.matches('summary') && <Summary />}
     </section>
   );

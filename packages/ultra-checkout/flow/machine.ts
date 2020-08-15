@@ -7,8 +7,6 @@ export const createCheckoutMachine = (order: CartValues) => {
       id: 'checkout',
       initial: 'idle',
       context: {
-        auth: null,
-        user: null,
         order,
       },
       on: {
@@ -56,7 +54,13 @@ export const createCheckoutMachine = (order: CartValues) => {
           on: { STEP_CHANGE: 'review', STEP_BACK: 'homeAddress' },
         },
         review: {
-          on: { STEP_CHANGE: 'summary', STEP_BACK: 'payment' },
+          on: {
+            STEP_CHANGE: 'summary',
+            STEP_BACK: 'payment',
+            'GOTO.shippingAddress': 'shippingAddress',
+            'GOTO.homeAddress': 'homeAddress',
+            'GOTO.payment': 'payment',
+          },
         },
         summary: {
           on: { STEP_CHANGE: 'idle', STEP_BACK: 'review' },
@@ -65,16 +69,24 @@ export const createCheckoutMachine = (order: CartValues) => {
     },
     {
       guards: {
-        emptyHomeAddress: ({ order }) => Boolean(order && !order.homeAddress),
+        emptyHomeAddress: ({ order }) =>
+          Boolean(
+            order && !order.homeAddress?.city && order.shippingAddress?.city
+          ),
         filledOut: ({ order }) =>
           Boolean(
             order &&
-              order.paymentMethod &&
-              order.homeAddress &&
-              order.shippingAddress
+              order.paymentMethod?.id &&
+              order.homeAddress?.city &&
+              order.shippingAddress?.city
           ),
         emptyPaymentMethod: ({ order }) =>
-          Boolean(order && !order.paymentMethod),
+          Boolean(
+            order &&
+              order.shippingAddress?.city &&
+              order.homeAddress?.city &&
+              !order.paymentMethod
+          ),
       },
     }
   );

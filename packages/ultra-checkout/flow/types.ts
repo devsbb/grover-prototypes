@@ -6,14 +6,20 @@ export enum Step {
   summary,
 }
 
-export type Address = {};
-export type PaymentMethod = {};
+export type Address = {
+  city?: string;
+};
+export type PaymentMethod = {
+  id?: string;
+};
 
 export interface AuthValues {
   auth: any;
   user: any;
+  login: () => void;
+  logout: () => void;
 }
-export interface CheckoutValues extends AuthValues {
+export interface CheckoutValues {
   order: CartValues;
 }
 
