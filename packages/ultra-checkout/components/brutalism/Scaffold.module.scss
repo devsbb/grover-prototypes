@@ -16,12 +16,21 @@
 
 .blinker {
   border: 2px solid #ff0000;
+  padding: 12px;
+  margin: 6px 0;
 }
 
 .grid {
-  padding: 12px;
-  margin: 6px 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: space-between;
+  justify-content: space-between;
+  * {
+    margin: initial;
+  }
 }

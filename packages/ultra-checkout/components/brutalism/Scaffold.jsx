@@ -11,3 +11,11 @@ export const ScaffoldBlinker = (props) => (
 export const ScaffoldBlinkGrid = (props) => (
   <section className={[styles.blinker, styles.grid].join(' ')} {...props} />
 );
+
+export const ScaffoldGrid = (props) => (
+  <section className={styles.grid} {...props} />
+);
+
+export const ScaffoldHeader = (props) => (
+  <header className={styles.header} {...props} />
+);

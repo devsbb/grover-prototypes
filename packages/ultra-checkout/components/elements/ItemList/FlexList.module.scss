@@ -1,0 +1,21 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  height: 50px;
+}
+
+.item {
+  &:nth-of-type(1) {
+    background-image: url('http://place-puppy.com/200x200');
+  }
+  &:nth-of-type(2) {
+    background-image: url('http://place-puppy.com/120x120');
+  }
+  &:nth-of-type(3) {
+    background-image: url('http://place-puppy.com/100x100');
+  }
+  width: 50px;
+  height: 50px;
+  background-size: contain;
+  border: 2px solid blue;
+}

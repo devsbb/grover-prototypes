@@ -22,6 +22,7 @@ export interface CartValues {
   guestToken: string;
   shippingAddress?: Address;
   homeAddress?: Address;
-  payment: PaymentMethod;
+  paymentMethod?: PaymentMethod;
   step: Step;
+  lineItems: Array<any>;
 }
