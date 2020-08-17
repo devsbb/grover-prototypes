@@ -9,7 +9,7 @@ export class MockApi {
   }
 
   deleteUserData = async ({ userId }) => {
-    const { orders } = await this.userApi.getUser({ userId });
+    const orders = (await this.userApi.getUser({ userId })).orders || [];
     await this.userApi.removeUser({ userId });
     await orders.map((orderNumber) =>
       this.orderApi.deleteOrder({ orderNumber })

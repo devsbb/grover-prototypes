@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { AuthGuard, AuthContext } from '../flow/AppContext';
+import { AuthGuard, AuthApi, AuthContext } from '../flow/AppContext';
 import { ScaffoldContainer } from '../components/brutalism/Scaffold';
 import { CheckoutBase } from '../components/checkout/CheckoutBase';
 import { createCheckoutMachine } from '../flow/machine';
@@ -8,13 +8,12 @@ import { createCart, createMixCart } from '../mocks';
 import styles from './Home.module.scss';
 
 export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
-  const [user, login] = useState(null);
+  const [user, setUser] = useState(null);
   const regularMachine = createCheckoutMachine(flexOrder);
   const guestMachine = createCheckoutMachine(guestOrder);
   const mixMachine = createCheckoutMachine(mixCart);
   const swapMachine = createCheckoutMachine(swapCart);
 
-  console.log({ regularMachine, guestMachine });
   return (
     <div>
       <Head>
@@ -26,8 +25,11 @@ export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
         <AuthContext.Provider
           value={{
             user,
-            login: () => login({ id: 456 }),
-            logout: () => login(null),
+            login: () =>
+              AuthApi.login({ id: 456 }).then((data) => {
+                setUser(data);
+              }),
+            logout: () => AuthApi.logout().then(() => setUser(null)),
           }}
         >
           <ScaffoldContainer>

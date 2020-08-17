@@ -1,32 +1,86 @@
+interface QueryParams {
+  endpoint: string;
+  method: string;
+  body?: object;
+  query?: string;
+}
+const query = async ({
+  endpoint,
+  method = 'GET',
+  query,
+  body,
+}: QueryParams) => {
+  const url = !query
+    ? `http://localhost:3000/api/${endpoint}`
+    : `http://localhost:3000/api/${endpoint}?${query}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  });
+  return res.json();
+};
 export const CheckoutApi = {
   order: {
-    submit: (order) => Promise.resolve({ data: order }),
+    create: (order) =>
+      query({
+        endpoint: 'orders',
+        method: 'POST',
+        body: order,
+      }),
+    submit: ({ orderNumber }) =>
+      query({ endpoint: `orders/${orderNumber}/complete`, method: 'PATCH' }),
   },
   paymentMethod: {
     add: () => Promise.resolve(),
     update: () => Promise.resolve(),
   },
   shippingAddress: {
-    add: (test) => {
+    add: ({ orderNumber }, test) => {
       console.log(test);
-      return Promise.resolve();
+      return query({
+        endpoint: `orders/${orderNumber}/address`,
+        method: 'PATCH',
+        body: { type: 'shipping', address: test },
+      });
     },
     update: () => Promise.resolve(),
   },
   homeAddress: {
-    add: (test) => {
-      console.log(test);
-      return Promise.resolve();
+    add: ({ orderNumber }, test) => {
+      console.log({ orderNumber, test });
+      return query({
+        endpoint: `orders/${orderNumber}/address`,
+        method: 'PATCH',
+        body: { type: 'billing', address: test },
+      });
     },
     update: () => Promise.resolve(),
   },
   lineItem: {
-    add: (test) => {
-      console.log(test);
-      return Promise.resolve();
+    add: ({ orderNumber }, item) => {
+      console.log(item);
+      return query({
+        endpoint: `orders/${orderNumber}/line_items`,
+        method: 'POST',
+        body: { item },
+      });
     },
-    delete: () => Promise.resolve(),
-    update: () => Promise.resolve(),
+    delete: ({ orderNumber }, id) =>
+      query({
+        endpoint: `orders/${orderNumber}/line_items/${id}`,
+        method: 'DELETE',
+      }),
+    update: ({ orderNumber }, item) => {
+      const { id } = item;
+      return query({
+        endpoint: `orders/${orderNumber}/line_items/${id}`,
+        method: 'PATCH',
+        body: { item },
+      });
+    },
   },
 };
 

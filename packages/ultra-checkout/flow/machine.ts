@@ -18,7 +18,7 @@ export const createCheckoutMachine = (order: CartValues) => {
             const value: ApiAccessor = event.value;
             const { payload, operation, entity } = value;
 
-            CheckoutApi[entity][operation](payload).then((e) => console.log(e));
+            CheckoutApi[entity][operation](context.order, payload);
             return context;
           }),
         },
@@ -35,25 +35,46 @@ export const createCheckoutMachine = (order: CartValues) => {
         },
       },
       states: {
+        error: { on: { STEP_BACK: 'idle' } },
+        next: {
+          always: [
+            {
+              target: 'review',
+              cond: 'filledOut',
+            },
+            {
+              target: 'homeAddress',
+              cond: 'emptyHomeAddress',
+            },
+            {
+              target: 'payment',
+              cond: 'emptyPaymentMethod',
+            },
+            {
+              target: 'shippingAddress',
+            },
+          ],
+        },
         idle: {
+          invoke: {
+            id: 'createOrder',
+            src: (context) => CheckoutApi.order.create(context.order),
+            onDone: {
+              target: 'next',
+              actions: assign({
+                order: (context, event) => ({
+                  ...context.order,
+                  ...event.data,
+                }),
+              }),
+            },
+            onError: {
+              target: 'error',
+              actions: assign({ error: (context, event) => event.data }),
+            },
+          },
           on: {
-            STEP_CHANGE: [
-              {
-                target: 'review',
-                cond: 'filledOut',
-              },
-              {
-                target: 'homeAddress',
-                cond: 'emptyHomeAddress',
-              },
-              {
-                target: 'payment',
-                cond: 'emptyPaymentMethod',
-              },
-              {
-                target: 'shippingAddress',
-              },
-            ],
+            STEP_CHANGE: 'next',
           },
         },
         shippingAddress: {
@@ -77,7 +98,7 @@ export const createCheckoutMachine = (order: CartValues) => {
         submit: {
           invoke: {
             id: 'submitOrder',
-            src: (context) => CheckoutApi.submitOrder(context.order),
+            src: (context) => CheckoutApi.order.submit(context.order),
             onDone: {
               target: 'summary',
               actions: assign({ success: (context, event) => true }),
@@ -94,20 +115,6 @@ export const createCheckoutMachine = (order: CartValues) => {
       },
     },
     {
-      actions: {
-        setShippingAddress: assign({
-          order: (context, event) => ({
-            ...context.order,
-            shippingAddress: event.value,
-          }),
-        }),
-        setHomeAddress: assign({
-          order: (context, event) => ({
-            ...context.order,
-            homeAddress: event.value,
-          }),
-        }),
-      },
       guards: {
         emptyHomeAddress: ({ order }) =>
           Boolean(

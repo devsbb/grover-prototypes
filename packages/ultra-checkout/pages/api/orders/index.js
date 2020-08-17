@@ -22,15 +22,19 @@ async function getOrder(req, res) {
   }
 }
 async function createOrder(req, res) {
-  const {
-    body: { items, userId },
-    query: { orderMode },
-  } = req;
-  const response = await req.api.orderApi.createOrder({
-    items,
-    userId,
-    orderMode,
-  });
-  res.statusCode = 200;
-  res.json(response);
+  try {
+    const {
+      body: { lineItems, orderMode, guestToken },
+    } = req;
+    const { id } = req.session.user || guestToken;
+    const response = await req.api.orderApi.createOrder({
+      lineItems,
+      userId: id,
+      orderMode,
+    });
+    res.statusCode = 200;
+    res.json(response);
+  } catch (e) {
+    console.error(e);
+  }
 }

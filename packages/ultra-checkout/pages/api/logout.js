@@ -9,12 +9,12 @@ export default connectHandler;
 async function logout(req, res) {
   try {
     const { api } = req;
-    const { userId } = req.session.get('user');
-    await api.deleteUserData({ userId });
+    const { id } = req.session.user;
+    await api.deleteUserData({ userId: id });
   } catch (e) {
     console.error(e);
   }
   req.session.destroy();
 
-  res.send('Logged out');
+  res.json({ user: null });
 }

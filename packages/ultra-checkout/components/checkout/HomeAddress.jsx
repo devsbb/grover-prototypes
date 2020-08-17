@@ -1,5 +1,4 @@
 export const HomeAddress = ({ data, send, sendUpdate }) => {
-  console.log({ data });
   const { update } = sendUpdate('homeAddress', send);
   return (
     <div>

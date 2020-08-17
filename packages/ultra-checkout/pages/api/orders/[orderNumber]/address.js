@@ -6,15 +6,14 @@ connectHandler.patch(updateAddress);
 
 export default connectHandler;
 
-function updateAddress(req, res) {
+async function updateAddress(req, res) {
   try {
     const {
-      body: { address },
+      body: { address, type },
       query: { orderNumber },
     } = req;
-    const { type } = address;
-    const property = type === 'billing' ? 'billingAddress' : 'shippingAddress';
-    const response = req.api.orderApi.updateOrder({
+    const property = type === 'billing' ? 'homeAddress' : 'shippingAddress';
+    const response = await req.api.orderApi.updateOrder({
       property,
       orderNumber,
       update: address,
@@ -22,6 +21,7 @@ function updateAddress(req, res) {
     res.statusCode = 200;
     res.json(response);
   } catch (e) {
+    console.error(e);
     res.json({ address: null });
   }
 }

@@ -40,6 +40,7 @@ export const CheckoutBase = ({ checkout, children }) => {
         </button>
       </ScaffoldBlinkGrid>
       {current.matches('idle') && <div>Idling...</div>}
+      {current.matches('error') && <div>Erroring...</div>}
 
       {current.matches('homeAddress') && (
         <HomeAddress

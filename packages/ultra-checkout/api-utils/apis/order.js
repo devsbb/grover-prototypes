@@ -1,3 +1,5 @@
+import { createCart, createMixCart } from './data';
+
 const parseNumber = (number, prefix) => {
   const res = parseInt(number.replace(prefix, ''), 10);
   console.log({ res });
@@ -15,13 +17,11 @@ export default class MockOrderApi {
   }
   getOrder = ({ orderNumber }) => {
     const order = this.orders[orderNumber];
-    if (!order) {
-      throw new Error({ orderNumber: null });
-    }
+
     return order;
   };
 
-  generateNumber = async ({ orderMode }) => {
+  generateNumber = async ({ orderMode = 'FLEX' }) => {
     const mode = orderMode.toLowerCase();
     const prefix = this.orderPrefixes[mode];
     const orderNumbers = Object.keys(this.orders).filter((num) =>
@@ -40,23 +40,18 @@ export default class MockOrderApi {
     return `${prefix}${reference}`;
   };
 
-  createOrder = async ({ userId, orderMode, items }) => {
-    const orderNumber = await this.generateNumber({ orderMode });
-    this.orders[orderNumber] = {
-      orderNumber,
-      orderMode,
-      userId,
-      items,
-      shippingAddress: null,
-      billingAddress: null,
-      paymentMethod: null,
-    };
-    console.log();
-    return Promise.resolve(this.orders[orderNumber]);
+  createOrder = async ({ userId, orderMode, orderNumber, lineItems }) => {
+    const reference = orderNumber || (await this.generateNumber({ orderMode }));
+    const order = await (orderMode === 'mix'
+      ? createMixCart()
+      : createCart({ auth: { userId } }));
+    this.orders[reference] = { ...order, orderNumber: reference, lineItems };
+    return Promise.resolve(this.orders[reference]);
   };
 
   updateOrder = async ({ orderNumber, property, update }) => {
     const order = this.getOrder({ orderNumber });
+    if (!order) return { order: null };
     const state = this.orders[orderNumber][property] || {};
     this.orders[orderNumber] = {
       ...order,
@@ -74,15 +69,17 @@ export default class MockOrderApi {
   addItem = async ({ orderNumber, item }) => {
     const order = this.getOrder({ orderNumber });
     const itemId =
-      order.items.length > 0 ? order.items[order.items.length - 1].id + 1 : 1;
-    order.items = [...order.items, { id: itemId, ...item }];
+      order.lineItems.length > 0
+        ? order.lineItems[order.lineItems.length - 1].id + 1
+        : 1;
+    order.lineItems = [...order.lineItems, { id: itemId, ...item }];
     this.orders[orderNumber] = order;
     return order;
   };
   deleteItem = async ({ orderNumber, itemId }) => {
     const order = this.getOrder({ orderNumber });
-    order.items = order.items.filter(({ id }) => id !== itemId);
-    if (!order.items || order.items.length === 0) {
+    order.lineItems = order.lineItems.filter(({ id }) => id !== itemId);
+    if (!order.lineItems || order.lineItems.length === 0) {
       return this.deleteOrder({ orderNumber });
     }
     this.orders[orderNumber] = order;
@@ -94,7 +91,7 @@ export default class MockOrderApi {
     if (item.quantity === 0) {
       return this.deleteItem({ orderNumber, itemId });
     }
-    order.items = order.items.map((val) => {
+    order.lineItems = order.lineItems.map((val) => {
       if (val.id !== itemId) return val;
       return {
         ...val,

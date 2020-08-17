@@ -24,7 +24,6 @@ interface Props {
 }
 export const ItemList = (props: Props) => {
   const { order } = props;
-  console.log({ order });
   if (isMix(order)) return <MixList lineItems={order.lineItems} />;
   return <FlexList lineItems={order.lineItems} />;
 };
