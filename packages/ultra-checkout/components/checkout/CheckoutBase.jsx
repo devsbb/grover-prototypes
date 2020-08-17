@@ -32,7 +32,12 @@ export const CheckoutBase = ({ checkout, children }) => {
       </ScaffoldHeader>
       <ScaffoldBlinkGrid>
         <button onClick={() => send('STEP_BACK')}>Step back!</button>
-        <button onClick={() => send('STEP_CHANGE')}>Step!</button>
+        <button
+          disabled={current.matches('review')}
+          onClick={() => send('STEP_CHANGE')}
+        >
+          Step!
+        </button>
       </ScaffoldBlinkGrid>
       {current.matches('idle') && <div>Idling...</div>}
 

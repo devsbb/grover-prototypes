@@ -9,6 +9,8 @@ export const createCheckoutMachine = (order: CartValues) => {
       initial: 'idle',
       context: {
         order,
+        error: null,
+        success: null,
       },
       on: {
         submit: {
@@ -65,11 +67,25 @@ export const createCheckoutMachine = (order: CartValues) => {
         },
         review: {
           on: {
-            STEP_CHANGE: 'summary',
+            SUBMIT_ORDER: 'submit',
             STEP_BACK: 'payment',
             'GOTO.shippingAddress': 'shippingAddress',
             'GOTO.homeAddress': 'homeAddress',
             'GOTO.payment': 'payment',
+          },
+        },
+        submit: {
+          invoke: {
+            id: 'submitOrder',
+            src: (context) => CheckoutApi.submitOrder(context.order),
+            onDone: {
+              target: 'summary',
+              actions: assign({ success: (context, event) => true }),
+            },
+            onError: {
+              target: 'review',
+              actions: assign({ error: (context, event) => event.data }),
+            },
           },
         },
         summary: {
@@ -78,6 +94,20 @@ export const createCheckoutMachine = (order: CartValues) => {
       },
     },
     {
+      actions: {
+        setShippingAddress: assign({
+          order: (context, event) => ({
+            ...context.order,
+            shippingAddress: event.value,
+          }),
+        }),
+        setHomeAddress: assign({
+          order: (context, event) => ({
+            ...context.order,
+            homeAddress: event.value,
+          }),
+        }),
+      },
       guards: {
         emptyHomeAddress: ({ order }) =>
           Boolean(

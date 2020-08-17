@@ -21,6 +21,8 @@ export interface AuthValues {
 }
 export interface CheckoutValues {
   order: CartValues;
+  success?: boolean | null;
+  error?: boolean | null;
 }
 
 export interface CartValues {

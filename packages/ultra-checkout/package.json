@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "prettier --write ."
   },
   "dependencies": {
     "@xstate/react": "^0.8.1",
     "next": "9.5.2",
+    "next-connect": "^0.8.1",
+    "next-session": "^3.2.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "sass": "^1.26.10",
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.46",
+    "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   }
 }

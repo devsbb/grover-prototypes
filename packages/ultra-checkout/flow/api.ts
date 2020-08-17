@@ -1,4 +1,7 @@
 export const CheckoutApi = {
+  order: {
+    submit: (order) => Promise.resolve({ data: order }),
+  },
   paymentMethod: {
     add: () => Promise.resolve(),
     update: () => Promise.resolve(),
@@ -31,9 +34,10 @@ type EntityKey =
   | 'paymentMethod'
   | 'shippingAddress'
   | 'homeAddress'
-  | 'lineItem';
+  | 'lineItem'
+  | 'order';
 
-type Operation = 'add' | 'delete' | 'update';
+type Operation = 'add' | 'delete' | 'update' | 'submit';
 export interface ApiAccessor {
   entity: EntityKey;
   operation: Operation;
