@@ -25,8 +25,8 @@ export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
         <AuthContext.Provider
           value={{
             user,
-            login: () =>
-              AuthApi.login({ id: 456 }).then((data) => {
+            login: ({ name }) =>
+              AuthApi.login({ name }).then((data) => {
                 setUser(data);
               }),
             logout: () => AuthApi.logout().then(() => setUser(null)),
@@ -41,7 +41,7 @@ export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
             {/* <pre className={styles.pre}>
             {JSON.stringify(regularMachine.current.context.order)}
           </pre> */}
-            <AuthGuard>
+            <AuthGuard name="nusa">
               <CheckoutBase checkout={regularMachine}>
                 <h2>Auth</h2>
               </CheckoutBase>

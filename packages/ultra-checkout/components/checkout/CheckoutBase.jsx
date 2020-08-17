@@ -38,6 +38,12 @@ export const CheckoutBase = ({ checkout, children }) => {
         >
           Step!
         </button>
+        <button
+          disabled={!current.matches('idle')}
+          onClick={() => send('create')}
+        >
+          Create!
+        </button>
       </ScaffoldBlinkGrid>
       {current.matches('idle') && <div>Idling...</div>}
       {current.matches('error') && <div>Erroring...</div>}

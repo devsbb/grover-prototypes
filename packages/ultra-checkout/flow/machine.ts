@@ -55,7 +55,7 @@ export const createCheckoutMachine = (order: CartValues) => {
             },
           ],
         },
-        idle: {
+        create: {
           invoke: {
             id: 'createOrder',
             src: (context) => CheckoutApi.order.create(context.order),
@@ -77,6 +77,7 @@ export const createCheckoutMachine = (order: CartValues) => {
             STEP_CHANGE: 'next',
           },
         },
+        idle: { on: { create: 'create', STEP_CHANGE: 'next' } },
         shippingAddress: {
           on: { STEP_CHANGE: 'homeAddress', STEP_BACK: 'idle' },
         },
@@ -120,13 +121,16 @@ export const createCheckoutMachine = (order: CartValues) => {
           Boolean(
             order && !order.homeAddress?.city && order.shippingAddress?.city
           ),
-        filledOut: ({ order }) =>
-          Boolean(
+        filledOut: ({ order }) => {
+          const isFilledOut = Boolean(
             order &&
               order.paymentMethod?.id &&
               order.homeAddress?.city &&
               order.shippingAddress?.city
-          ),
+          );
+          console.log({ isFilledOut, order });
+          return isFilledOut;
+        },
         emptyPaymentMethod: ({ order }) =>
           Boolean(
             order &&

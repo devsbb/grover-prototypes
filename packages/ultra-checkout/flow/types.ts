@@ -16,7 +16,7 @@ export type PaymentMethod = {
 export interface AuthValues {
   auth: any;
   user: any;
-  login: () => void;
+  login: ({ name }: { name?: string }) => void;
   logout: () => void;
 }
 export interface CheckoutValues {

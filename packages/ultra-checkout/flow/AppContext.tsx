@@ -3,11 +3,11 @@ import { CartValues, AuthValues } from './types';
 
 export const CartContext = createContext<Partial<CartValues>>({});
 export const AuthContext = createContext<Partial<AuthValues>>({
-  login: () => {},
+  login: ({ name }: { name?: string }) => {},
 });
 
 export const AuthApi = {
-  login: async () => {
+  login: async ({ name }) => {
     const res = await fetch('http://localhost:3000/api/login', {
       method: 'POST',
       headers: {
@@ -27,12 +27,12 @@ export const AuthApi = {
     return res.json();
   },
 };
-export const AuthGuard = ({ children }) => (
+export const AuthGuard = ({ children, name }) => (
   <AuthContext.Consumer>
     {({ user, login, logout }) =>
       !user ? (
         <em>
-          forbidden <button onClick={login}>Login</button>
+          forbidden <button onClick={() => login({ name })}>Login</button>
         </em>
       ) : (
         <>
