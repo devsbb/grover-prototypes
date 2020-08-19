@@ -1,6 +1,7 @@
 import { MachineOptions, assign } from 'xstate';
 import { CheckoutValues, OrderMode } from './types';
-import { CheckoutApi, ApiAccessor } from './api';
+import { CheckoutApi } from './api/rest';
+import { ApiAccessor } from './api/integration';
 
 export const defaultOptions: MachineOptions<CheckoutValues<OrderMode>, any> = {
   activities: {},

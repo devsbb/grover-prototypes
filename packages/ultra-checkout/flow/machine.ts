@@ -1,6 +1,6 @@
 import { Machine, MachineOptions, assign } from 'xstate';
 import { CheckoutValues, CartOrder, OrderMode } from './types';
-import { CheckoutApi } from './api';
+import { CheckoutApi } from './api/rest';
 import { defaultOptions } from './defaultOptions';
 
 interface MachineCreation {

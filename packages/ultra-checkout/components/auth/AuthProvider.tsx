@@ -1,7 +1,8 @@
 import { createContext } from 'react';
-import { CartValues, AuthValues } from './types';
+import { useState } from 'react';
 
-export const CartContext = createContext<Partial<CartValues>>({});
+import { AuthValues } from '../../flow/types';
+
 export const AuthContext = createContext<Partial<AuthValues>>({
   login: ({ name }: { name?: string }) => {},
 });
@@ -43,3 +44,21 @@ export const AuthGuard = ({ children, name }) => (
     }
   </AuthContext.Consumer>
 );
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        login: ({ name }) =>
+          AuthApi.login({ name }).then((data) => {
+            setUser(data);
+          }),
+        logout: () => AuthApi.logout().then(() => setUser(null)),
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};

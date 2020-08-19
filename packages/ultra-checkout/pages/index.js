@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
-import { AuthGuard, AuthApi, AuthContext } from '../flow/AppContext';
+import { AuthProvider, AuthGuard } from '../components/auth/AuthProvider';
 import { ScaffoldContainer } from '../components/brutalism/Scaffold';
 import { CheckoutBase } from '../components/checkout/CheckoutBase';
 import { createCheckoutMachine } from '../flow/machine';
@@ -8,7 +7,6 @@ import { createCart, createMixCart } from '../mocks';
 import styles from './Home.module.scss';
 
 export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
-  const [user, setUser] = useState(null);
   const regularMachine = createCheckoutMachine(flexOrder);
   const guestMachine = createCheckoutMachine(guestOrder);
   const mixMachine = createCheckoutMachine(mixCart);
@@ -22,25 +20,13 @@ export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
       </Head>
 
       <main className={styles.container}>
-        <AuthContext.Provider
-          value={{
-            user,
-            login: ({ name }) =>
-              AuthApi.login({ name }).then((data) => {
-                setUser(data);
-              }),
-            logout: () => AuthApi.logout().then(() => setUser(null)),
-          }}
-        >
+        <AuthProvider>
           <ScaffoldContainer>
             <CheckoutBase checkout={guestMachine}>
               <h2>Guest</h2>
             </CheckoutBase>
           </ScaffoldContainer>
           <ScaffoldContainer>
-            {/* <pre className={styles.pre}>
-            {JSON.stringify(regularMachine.current.context.order)}
-          </pre> */}
             <AuthGuard name="nusa">
               <CheckoutBase checkout={regularMachine}>
                 <h2>Auth</h2>
@@ -57,7 +43,7 @@ export default function Home({ flexOrder, guestOrder, mixCart, swapCart }) {
               <h2>SWAP</h2>
             </CheckoutBase>
           </ScaffoldContainer>
-        </AuthContext.Provider>
+        </AuthProvider>
       </main>
     </div>
   );

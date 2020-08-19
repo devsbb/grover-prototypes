@@ -1,7 +1,3 @@
-import { paymentMethod } from './paymentMethod';
-import { billingAddress, shippingAddress } from './address';
-import { lineItem } from './lineItem';
-import { order } from './order';
 import {
   CartOrder,
   PaymentMethod,
@@ -30,23 +26,15 @@ interface Operations<R> {
 }
 
 export interface ApiAccessor<T> {
-  entity: keyof CheckoutApi;
+  entity: keyof CheckoutAPI;
   operation: keyof Operations<T>;
   payload: T;
 }
 
-interface CheckoutApi {
+export interface CheckoutAPI {
   paymentMethod: APISelection<PaymentMethod>;
   shippingAddress: APISelection<Address>;
   homeAddress: APISelection<Address>;
   lineItem: APISelection<LineItem>;
   order: APISelection<any>;
 }
-
-export const CheckoutApi: CheckoutApi = {
-  order,
-  paymentMethod,
-  shippingAddress,
-  homeAddress: billingAddress,
-  lineItem,
-};
