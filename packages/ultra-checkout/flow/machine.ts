@@ -1,37 +1,34 @@
-import { Machine, assign } from 'xstate';
-import { CheckoutValues, CartValues } from './types';
-import { CheckoutApi, ApiAccessor } from './api';
+import { Machine, MachineOptions, assign } from 'xstate';
+import { CheckoutValues, CartOrder, OrderMode } from './types';
+import { CheckoutApi } from './api';
+import { defaultOptions } from './defaultOptions';
 
-export const createCheckoutMachine = (order: CartValues) => {
-  return Machine<CheckoutValues>(
+interface MachineCreation {
+  order: CartOrder<OrderMode>;
+  orderMode: OrderMode;
+  options: MachineOptions<CheckoutValues<OrderMode>, any>;
+}
+export const createCheckoutMachine = ({
+  order,
+  orderMode,
+  options = defaultOptions,
+}: MachineCreation) => {
+  return Machine<CheckoutValues<typeof orderMode>>(
     {
       id: 'checkout',
       initial: 'idle',
       context: {
         order,
+        orderMode,
         error: null,
         success: null,
       },
       on: {
-        submit: {
-          actions: assign((context, event) => {
-            const value: ApiAccessor = event.value;
-            const { payload, operation, entity } = value;
-
-            CheckoutApi[entity][operation](context.order, payload);
-            return context;
-          }),
-        },
         update: {
-          actions: assign({
-            order: (ctx, e) => {
-              const { step, updated } = e.value;
-              return {
-                ...ctx.order,
-                [step]: { ...ctx.order[step], ...updated },
-              };
-            },
-          }),
+          actions: ['update'],
+        },
+        submit: {
+          actions: ['submit'],
         },
       },
       states: {
@@ -58,19 +55,15 @@ export const createCheckoutMachine = (order: CartValues) => {
         create: {
           invoke: {
             id: 'createOrder',
-            src: (context) => CheckoutApi.order.create(context.order),
+            src: (context) =>
+              CheckoutApi.order.add({ ...context.order, orderMode }),
             onDone: {
               target: 'next',
-              actions: assign({
-                order: (context, event) => ({
-                  ...context.order,
-                  ...event.data,
-                }),
-              }),
+              actions: ['updateOrder'],
             },
             onError: {
               target: 'error',
-              actions: assign({ error: (context, event) => event.data }),
+              actions: ['error'],
             },
           },
           on: {
@@ -102,11 +95,11 @@ export const createCheckoutMachine = (order: CartValues) => {
             src: (context) => CheckoutApi.order.submit(context.order),
             onDone: {
               target: 'summary',
-              actions: assign({ success: (context, event) => true }),
+              actions: ['success'],
             },
             onError: {
               target: 'review',
-              actions: assign({ error: (context, event) => event.data }),
+              actions: ['error'],
             },
           },
         },
@@ -115,30 +108,6 @@ export const createCheckoutMachine = (order: CartValues) => {
         },
       },
     },
-    {
-      guards: {
-        emptyHomeAddress: ({ order }) =>
-          Boolean(
-            order && !order.homeAddress?.city && order.shippingAddress?.city
-          ),
-        filledOut: ({ order }) => {
-          const isFilledOut = Boolean(
-            order &&
-              order.paymentMethod?.id &&
-              order.homeAddress?.city &&
-              order.shippingAddress?.city
-          );
-          console.log({ isFilledOut, order });
-          return isFilledOut;
-        },
-        emptyPaymentMethod: ({ order }) =>
-          Boolean(
-            order &&
-              order.shippingAddress?.city &&
-              order.homeAddress?.city &&
-              !order.paymentMethod
-          ),
-      },
-    }
+    options
   );
 };

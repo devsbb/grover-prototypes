@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import Head from 'next/head';
+import { useState } from 'react';
 import { AuthGuard, AuthApi, AuthContext } from '../flow/AppContext';
 import { ScaffoldContainer } from '../components/brutalism/Scaffold';
 import { CheckoutBase } from '../components/checkout/CheckoutBase';
@@ -69,9 +69,9 @@ Home.getInitialProps = async () => {
   const mixCart = await createMixCart({});
   const swapCart = await createMixCart({ swap: true });
   return {
-    flexOrder,
-    guestOrder,
-    mixCart,
-    swapCart,
+    flexOrder: { order: flexOrder, orderMode: 'FLEX' },
+    guestOrder: { order: guestOrder, orderMode: 'FLEX' },
+    mixCart: { order: mixCart, orderMode: 'MIX' },
+    swapCart: { order: swapCart, orderMode: 'SWAP' },
   };
 };
