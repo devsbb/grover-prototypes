@@ -23,7 +23,6 @@ export default class MockUserApi {
     const [oldest, ...newer] = used.sort(([_, a], [i, b]) => {
       return a.createdAt - b.createdAt;
     });
-    console.log('rolling', oldest);
     const [userId] = oldest;
     delete this.users[userId];
     return this.users;
@@ -47,7 +46,6 @@ export default class MockUserApi {
       addresses: [],
     };
     this.users[userId] = user;
-    console.log({ name, user });
     return user;
   };
 
@@ -60,7 +58,6 @@ export default class MockUserApi {
       .map((id) => parseInt(id, 10))
       .sort((a, b) => a - b)
       .pop();
-    console.log({ latestId, ids });
     return latestId + 1;
   };
 

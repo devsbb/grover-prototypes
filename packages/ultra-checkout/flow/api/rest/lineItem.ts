@@ -2,7 +2,6 @@ import { query } from './query';
 
 export const lineItem = {
   add: ({ orderNumber }, item) => {
-    console.log(item);
     return query({
       endpoint: `orders/${orderNumber}/line_items/`,
       method: 'POST',

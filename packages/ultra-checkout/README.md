@@ -7,7 +7,11 @@ This is prototyping a few concepts:
 - _not_ using xstate/react to manage the state
 - drop-in REST and GraphQL APIs for Cart management
 
-As a fun side-project, it implements a fictional "anti-patterns" design library called "brutalism". This is in opposition to the Grover checkout, which is beautiful and very heavily animated, but has trouble with state management. The brutalist checkout instead handles data perfectly, but has a visually horrible user interface.
+## Notes
+
+As a fun side-project, one of the included checkouts implements a fictional "anti-patterns" design library called "brutalism".
+
+This is in opposition to the Grover checkout, which is beautiful and very heavily animated, but has trouble with state management. The brutalist checkout instead handles data perfectly, but has a visually horrible user interface.
 
 ## Development setup
 

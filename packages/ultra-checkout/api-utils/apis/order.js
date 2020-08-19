@@ -2,7 +2,6 @@ import { createCart, createMixCart } from './data';
 
 const parseNumber = (number, prefix) => {
   const res = parseInt(number.replace(prefix, ''), 10);
-  console.log({ res });
   return res;
 };
 
@@ -36,7 +35,6 @@ export default class MockOrderApi {
       .pop();
     const number = (latestNumber + 1).toString();
     const reference = number.padStart(9, '0');
-    console.log({ reference });
     return `${prefix}${reference}`;
   };
 

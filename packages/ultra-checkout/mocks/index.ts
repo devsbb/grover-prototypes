@@ -3,12 +3,21 @@ import { Step, CartValues } from '../flow/types';
 const LineItems = [
   {
     id: 123,
+    variant: {},
+    meta: {},
+    quantity: 1,
   },
   {
     id: 234,
+    variant: {},
+    meta: {},
+    quantity: 1,
   },
   {
     id: 567,
+    variant: {},
+    meta: {},
+    quantity: 1,
   },
 ];
 const GuestOrder = {

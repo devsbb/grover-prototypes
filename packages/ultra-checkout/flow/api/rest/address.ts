@@ -1,6 +1,6 @@
 import { query } from './query';
-import { Address } from '../types';
-import { APISelection } from './integration';
+import { Address } from '../../types';
+import { APISelection } from '../integration';
 
 export const shippingAddress: APISelection<Address> = {
   add: async ({ orderNumber }, { value }) => {

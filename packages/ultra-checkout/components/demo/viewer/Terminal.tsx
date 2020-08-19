@@ -13,7 +13,6 @@ interface Context {
 export const Terminal = () => {
   const { content }: Context = useContext(TerminalContext);
   const formatted = [...Object.entries(content)].reduce((acc, [key, val]) => {
-    console.log({ key, val });
     return val.isActive && val.output
       ? { ...acc, [key]: val.output.slice().pop() }
       : { ...acc };

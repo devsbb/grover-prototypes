@@ -1,29 +1,14 @@
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-
+import { initializeApollo } from './client';
+import { DocumentNode } from '@apollo/client';
 interface QueryParams {
-  query?: object;
-  variables?: string;
+  query?: DocumentNode;
+  variables?: any;
 }
 
-let apolloClient;
+const apolloClient = initializeApollo();
 
-function createApolloClient() {
-  return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: 'https://mix-cart-staging.grover.com/graphql'
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-    }),
-    cache: new InMemoryCache({}),
-  });
-}
 export const query = async ({ query, variables }: QueryParams) => {
-  const res = await fetch(url, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-  return res.json();
+  const res = await apolloClient.query({ query, variables });
+  console.log(res);
+  return res;
 };

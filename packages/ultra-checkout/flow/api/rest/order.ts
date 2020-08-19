@@ -1,5 +1,5 @@
 import { query } from './query';
-import { APISelection } from './index';
+import { APISelection } from '../integration';
 
 export const order: APISelection<any> = {
   add: (order) =>

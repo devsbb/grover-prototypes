@@ -3,7 +3,6 @@ import MockOrderApi from './apis/order';
 
 export class MockApi {
   constructor() {
-    console.log('constructing again');
     this.userApi = new MockUserApi();
     this.orderApi = new MockOrderApi();
   }

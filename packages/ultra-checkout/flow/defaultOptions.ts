@@ -16,12 +16,11 @@ export const defaultOptions: MachineOptions<CheckoutValues<OrderMode>, any> = {
       return context;
     }),
     update: assign({
-      order: (ctx, e) => {
-        console.log(ctx);
-        const { step, updated } = e.value;
+      order: (context, event) => {
+        const { step, updated } = event.value;
         return {
-          ...ctx.order,
-          [step]: { ...ctx.order[step], ...updated },
+          ...context.order,
+          [step]: { ...context.order[step], ...updated },
         };
       },
     }),

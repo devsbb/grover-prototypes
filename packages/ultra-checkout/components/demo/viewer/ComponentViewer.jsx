@@ -1,5 +1,5 @@
 import styles from './Terminal.module.scss';
-import { Terminal } from './Terminal';
+import { TerminalBlock } from '../TerminalBlock';
 import { useContext } from 'react';
 import { DemoContext, DemoProvider } from './DemoContext';
 import { TerminalContext, TerminalProvider } from './TerminalContext';
@@ -28,18 +28,15 @@ const ComponentPicker = () => {
   );
 };
 
-const ComponentViewer = ({ children, initialMode, enableTerminal }) => {
+const ComponentViewer = ({ children, initialMode }) => {
   return (
-    <div className={styles.container}>
-      {enableTerminal && <Terminal />}
-      <div
-        className={[
-          styles.viewer,
-          ...(initialMode ? [styles[initialMode]] : []),
-        ].join(' ')}
-      >
-        {children}
-      </div>
+    <div
+      className={[
+        styles.viewer,
+        ...(initialMode ? [styles[initialMode]] : []),
+      ].join(' ')}
+    >
+      {children}
     </div>
   );
 };
@@ -50,7 +47,10 @@ export const DemoView = ({ className, components, ...props }) => {
       <DemoProvider>
         <TerminalProvider>
           <ComponentPicker />
-          <ComponentViewer initialMode="grid-4-4" enableTerminal {...props} />
+          <div className={styles.container}>
+            <ComponentViewer initialMode="grid-4-4" {...props} />
+            <TerminalBlock name="terminal" />
+          </div>
         </TerminalProvider>
       </DemoProvider>
     </div>

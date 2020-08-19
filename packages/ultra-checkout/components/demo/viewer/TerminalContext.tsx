@@ -15,7 +15,6 @@ export const TerminalProvider = ({ children }) => {
   const [content, setContent] = useState({});
   const updateContent = useCallback(
     ({ name, isActive, output }) => {
-      console.log({ name, isActive, output });
       setContent((prev) => ({
         ...prev,
         [name]:

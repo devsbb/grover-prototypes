@@ -32,6 +32,10 @@ const setup = [
     name: 'swap',
     isActive: true,
   },
+  {
+    name: 'terminal',
+    isActive: false,
+  },
 ];
 export const DemoProvider = ({ children }) => {
   const [components, setComponents] = useState(setup);
