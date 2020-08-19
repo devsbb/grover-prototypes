@@ -13,7 +13,6 @@
 
 .terminal {
   background-color: black;
-  color: white;
   display: block;
   height: 100vh;
   width: 300px;
@@ -23,7 +22,7 @@
 }
 .bash {
   color: white;
-  font-size: medium;
+  font-size: 11px;
   font-family: Consolas, Monaco, Lucida Console, Liberation Mono,
     DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
   display: inline;

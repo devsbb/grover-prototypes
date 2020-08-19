@@ -5,16 +5,23 @@ import { DemoContext, DemoProvider } from './DemoContext';
 import { TerminalContext, TerminalProvider } from './TerminalContext';
 
 const Checkbox = ({ type = 'checkbox', name, checked = false, onChange }) => (
-  <input type={type} name={name} checked={checked} onChange={onChange} />
+  <label htmlFor={name}>
+    {name}
+    <input type={type} name={name} checked={checked} onChange={onChange} />
+  </label>
 );
 
 const ComponentPicker = () => {
-  const { components, toggleComponents } = useDemo();
+  const { components, toggleComponents, toggleOutput } = useDemo();
+  const onChange = (e) => {
+    toggleComponents({ name: e.target.name });
+    toggleOutput({ name: e.target.name, isActive: e.target.value });
+  };
   return (
     <ul className={styles.selector}>
       {components.map((option) => (
         <li key={option.name}>
-          <Checkbox {...option} onChange={toggleComponents} />
+          <Checkbox {...option} checked={option.isActive} onChange={onChange} />
         </li>
       ))}
     </ul>
@@ -52,13 +59,14 @@ export const DemoView = ({ className, components, ...props }) => {
 
 export const useDemo = () => {
   const { components, toggleComponents } = useContext(DemoContext);
-  const { content, updateContent } = useContext(TerminalContext);
+  const { content, updateContent, toggleOutput } = useContext(TerminalContext);
 
   return {
     components,
     toggleComponents,
     content,
     updateContent,
+    toggleOutput,
   };
 };
 

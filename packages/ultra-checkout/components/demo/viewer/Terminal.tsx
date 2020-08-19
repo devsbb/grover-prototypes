@@ -4,15 +4,23 @@ import { TerminalContext } from './TerminalContext';
 
 interface Context {
   content: {
-    [key: string]: any;
+    [key: string]: {
+      isActive: boolean;
+      output: Array<any>;
+    };
   };
 }
 export const Terminal = () => {
   const { content }: Context = useContext(TerminalContext);
-  console.log({ content });
+  const formatted = [...Object.entries(content)].reduce((acc, [key, val]) => {
+    console.log({ key, val });
+    return val.isActive && val.output
+      ? { ...acc, [key]: val.output.slice().pop() }
+      : { ...acc };
+  }, {});
   return (
     <div className={styles.terminal}>
-      <pre className={styles.terminal}>{JSON.stringify(content, null, 2)}</pre>
+      <pre className={styles.bash}>{JSON.stringify(formatted, null, 2)}</pre>
     </div>
   );
 };

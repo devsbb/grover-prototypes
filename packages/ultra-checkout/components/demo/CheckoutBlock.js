@@ -4,14 +4,15 @@ import { createCheckoutMachine } from '../../flow/machine';
 import { defaultOptions } from '../../flow/defaultOptions';
 import { useDemoComponent } from './viewer/ComponentViewer';
 import { useMemo } from 'react';
+import { AuthGuard } from '../auth/AuthProvider';
 
-export function CheckoutBlock({ name, machine, heading }) {
+export function CheckoutBlock({ name, withAuth, machine, heading }) {
   const { isActive, publishUpdates } = useDemoComponent({ name });
   if (!isActive) return null;
   const actions = defaultOptions.actions;
   const update = actions.update.assignment.order;
   const wrappedUpdate = useMemo(() => (ctx, event) => {
-    publishUpdates({ name, output: event });
+    publishUpdates({ name, isActive, output: event });
     const output = update(ctx, event);
     return output;
   });
@@ -29,12 +30,17 @@ export function CheckoutBlock({ name, machine, heading }) {
     },
   };
   const checkout = createCheckoutMachine({ ...machine, options });
+
   return (
     <ScaffoldContainer>
-      <h2>test</h2>
-      <CheckoutBase checkout={checkout}>
-        <h2>{heading}</h2>
-      </CheckoutBase>
+      <Wrapper withAuth={withAuth}>
+        <CheckoutBase checkout={checkout}>
+          <h2>{heading}</h2>
+        </CheckoutBase>
+      </Wrapper>
     </ScaffoldContainer>
   );
 }
+
+const Wrapper = ({ withAuth, children }) =>
+  withAuth ? <AuthGuard>{children}</AuthGuard> : children;

@@ -1,6 +1,9 @@
 import Head from 'next/head';
 import { AuthProvider, AuthGuard } from '../components/auth/AuthProvider';
-import { CheckoutBlock } from '../components/demo/CheckoutBlock';
+import {
+  CheckoutBlock,
+  AuthCheckoutBlock,
+} from '../components/demo/CheckoutBlock';
 import { DemoView } from '../components/demo/viewer/ComponentViewer';
 import { createCart, createMixCart } from '../mocks';
 import styles from './Home.module.scss';
@@ -17,9 +20,12 @@ export default function Demo({ flexOrder, guestOrder, mixCart, swapCart }) {
         <AuthProvider>
           <DemoView>
             <CheckoutBlock name="guest" heading="Guest" machine={guestOrder} />
-            <AuthGuard name="nusa">
-              <CheckoutBlock name="auth" heading="Auth" machine={flexOrder} />
-            </AuthGuard>
+            <CheckoutBlock
+              withAuth
+              name="auth"
+              heading="Auth"
+              machine={flexOrder}
+            />
             <CheckoutBlock name="mix" heading="MIX" machine={mixCart} />
             <CheckoutBlock name="swap" heading="SWAP" machine={swapCart} />
           </DemoView>
