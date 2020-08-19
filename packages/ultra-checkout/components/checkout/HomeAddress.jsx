@@ -6,7 +6,7 @@ export const HomeAddress = ({ data, send, sendUpdate }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          send('submit', {
+          send('SUBMIT', {
             value: { payload: data, entity: 'homeAddress', operation: 'add' },
           });
         }}
@@ -27,6 +27,15 @@ export const HomeAddress = ({ data, send, sendUpdate }) => {
             name="line1"
             value={data.line1 || ''}
             onChange={(e) => update('line1', e)}
+          />
+        </label>
+        <label htmlFor="line2">
+          Line2/Address2
+          <input
+            id="line2"
+            name="line2"
+            value={data.line2 || ''}
+            onChange={(e) => update('line2', e)}
           />
         </label>
         <input type="submit" value="submit" />

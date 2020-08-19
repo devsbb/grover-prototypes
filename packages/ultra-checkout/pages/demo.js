@@ -1,10 +1,8 @@
 import Head from 'next/head';
-import { AuthProvider, AuthGuard } from '../components/auth/AuthProvider';
-import {
-  CheckoutBlock,
-  AuthCheckoutBlock,
-} from '../components/demo/CheckoutBlock';
+import { AuthProvider } from '../components/auth/AuthProvider';
+import { CheckoutBlock } from '../components/demo/CheckoutBlock';
 import { DemoView } from '../components/demo/viewer/ComponentViewer';
+import { cartServiceAPI } from '../flow/api/graphql';
 import { createCart, createMixCart } from '../mocks';
 import styles from './Home.module.scss';
 
@@ -26,8 +24,18 @@ export default function Demo({ flexOrder, guestOrder, mixCart, swapCart }) {
               heading="Auth"
               machine={flexOrder}
             />
-            <CheckoutBlock name="mix" heading="MIX" machine={mixCart} />
-            <CheckoutBlock name="swap" heading="SWAP" machine={swapCart} />
+            <CheckoutBlock
+              name="mix"
+              heading="MIX"
+              machine={mixCart}
+              api={cartServiceAPI}
+            />
+            <CheckoutBlock
+              name="swap"
+              heading="SWAP"
+              machine={swapCart}
+              api={cartServiceAPI}
+            />
           </DemoView>
         </AuthProvider>
       </main>

@@ -37,11 +37,13 @@ const Order = {
     id: 234,
     city: 'test',
     line1: 'test2',
+    line2: 'Line2',
   },
   homeAddress: {
     id: 432,
     city: 'Lisbon',
     line1: 'Little Britain',
+    line2: 'Line2',
   },
   payment: {},
   lineItems: LineItems,
@@ -98,6 +100,8 @@ export const createMixCart = async ({
     ...MixCart,
     shippingAddress: {
       city: 'Belgrade',
+      line1: 'test',
+      line2: 'test2',
     },
     lineItems: swap ? LineItems.slice(1) : LineItems.slice(2),
   };

@@ -8,7 +8,10 @@ interface QueryParams {
 const apolloClient = initializeApollo();
 
 export const query = async ({ query, variables }: QueryParams) => {
-  const res = await apolloClient.query({ query, variables });
-  console.log(res);
-  return res;
+  try {
+    const res = await apolloClient.mutate({ mutation: query, variables });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
 };

@@ -26,15 +26,15 @@ const setup = [
   },
   {
     name: 'mix',
-    isActive: false,
-  },
-  {
-    name: 'swap',
     isActive: true,
   },
   {
-    name: 'terminal',
+    name: 'swap',
     isActive: false,
+  },
+  {
+    name: 'terminal',
+    isActive: true,
   },
 ];
 export const DemoProvider = ({ children }) => {

@@ -1,18 +1,23 @@
-import { Machine, MachineOptions, assign } from 'xstate';
+import { Machine, MachineOptions } from 'xstate';
 import { CheckoutValues, CartOrder, OrderMode } from './types';
-import { CheckoutApi } from './api/rest';
-import { defaultOptions } from './defaultOptions';
+import { classicAPI } from './api/rest';
+import { CheckoutAPI } from './api/integration';
+import { getDefaultOptions, invokeDefaultUpdate } from './defaultOptions';
 
 interface MachineCreation {
   order: CartOrder<OrderMode>;
   orderMode: OrderMode;
   options: MachineOptions<CheckoutValues<OrderMode>, any>;
+  api: CheckoutAPI;
 }
+
 export const createCheckoutMachine = ({
   order,
   orderMode,
-  options = defaultOptions,
+  api = classicAPI,
+  options,
 }: MachineCreation) => {
+  const defaults = options || getDefaultOptions(api);
   return Machine<CheckoutValues<typeof orderMode>>(
     {
       id: 'checkout',
@@ -28,12 +33,16 @@ export const createCheckoutMachine = ({
           actions: ['update'],
         },
         submit: {
+          target: 'next',
           actions: ['submit'],
         },
       },
       states: {
-        error: { on: { STEP_BACK: 'idle' } },
+        idle: { on: { create: 'create', STEP_CHANGE: 'next' } },
+        error: { id: 'error', on: { STEP_BACK: 'idle' } },
+        success: { id: 'success', on: { STEP_BACK: 'idle' } },
         next: {
+          id: 'next',
           always: [
             {
               target: 'review',
@@ -55,8 +64,7 @@ export const createCheckoutMachine = ({
         create: {
           invoke: {
             id: 'createOrder',
-            src: (context) =>
-              CheckoutApi.order.add({ ...context.order, orderMode }),
+            src: 'createOrder',
             onDone: {
               target: 'next',
               actions: ['updateOrder'],
@@ -70,17 +78,87 @@ export const createCheckoutMachine = ({
             STEP_CHANGE: 'next',
           },
         },
-        idle: { on: { create: 'create', STEP_CHANGE: 'next' } },
         shippingAddress: {
-          on: { STEP_CHANGE: 'homeAddress', STEP_BACK: 'idle' },
+          id: 'shippingAddress',
+          on: {
+            STEP_CHANGE: 'homeAddress',
+            EDIT: '.editing',
+            STEP_BACK: 'idle',
+          },
+          initial: 'editing',
+          states: {
+            idle: {
+              on: {
+                EDIT: 'editing',
+              },
+            },
+            editing: {
+              id: 'editing',
+              on: {
+                SUBMIT: 'loading',
+              },
+            },
+            loading: {
+              invoke: {
+                id: 'shippingAddressUpdate',
+                ...invokeDefaultUpdate,
+              },
+            },
+          },
         },
         homeAddress: {
-          on: { STEP_CHANGE: 'payment', STEP_BACK: 'shippingAddress' },
+          on: {
+            STEP_CHANGE: 'payment',
+            STEP_BACK: 'shippingAddress',
+          },
+          initial: 'editing',
+          states: {
+            idle: {
+              on: {
+                EDIT: 'editing',
+              },
+            },
+            editing: {
+              on: {
+                SUBMIT: 'loading',
+              },
+            },
+            loading: {
+              invoke: {
+                id: 'homeAddressUpdate',
+                ...invokeDefaultUpdate,
+              },
+            },
+          },
         },
         payment: {
+          initial: 'editing',
           on: { STEP_CHANGE: 'review', STEP_BACK: 'homeAddress' },
+          states: {
+            idle: {
+              on: {
+                EDIT: 'editing',
+              },
+            },
+            editing: {
+              on: {
+                SUBMIT: 'loading',
+              },
+            },
+            loading: {
+              invoke: {
+                id: 'paymentUpdate',
+                ...invokeDefaultUpdate,
+                onError: {
+                  target: '#review',
+                  actions: ['error'],
+                },
+              },
+            },
+          },
         },
         review: {
+          id: 'review',
           on: {
             SUBMIT_ORDER: 'submit',
             STEP_BACK: 'payment',
@@ -88,11 +166,27 @@ export const createCheckoutMachine = ({
             'GOTO.homeAddress': 'homeAddress',
             'GOTO.payment': 'payment',
           },
+          // states: {
+          //   idle: {
+          //     on: {
+          //       APPLY_VOUCHER: {
+          //         target: 'applyingVoucher',
+          //         cond: 'isFlexOrder',
+          //       },
+          //     },
+          //   },
+          //   applyingVoucher: {
+          //     invoke: {
+          //       id: 'applyVoucher',
+          //       ...invokeDefaultUpdate,
+          //     },
+          //   },
+          // },
         },
         submit: {
           invoke: {
             id: 'submitOrder',
-            src: (context) => CheckoutApi.order.submit(context.order),
+            src: 'submitOrder',
             onDone: {
               target: 'summary',
               actions: ['success'],
@@ -108,6 +202,6 @@ export const createCheckoutMachine = ({
         },
       },
     },
-    options
+    defaults
   );
 };

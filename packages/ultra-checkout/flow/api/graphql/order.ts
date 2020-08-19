@@ -4,14 +4,14 @@ import { APISelection } from '../integration';
 import { gql } from '@apollo/client';
 
 const CREATE_ORDER = gql`
-  mutation orderCreate(order: OrderInput) {
-   orderCreate(order: $order)
+  mutation orderCreate($order: OrderInput) {
+    orderCreate(order: $order)
   }
 `;
 
 const SUBMIT_ORDER = gql`
-  mutation orderSubmit(orderNumber: String) {
-   orderSubmit(number: $orderNumber)
+  mutation orderSubmit($orderNumber: String) {
+    orderSubmit(number: $orderNumber)
   }
 `;
 

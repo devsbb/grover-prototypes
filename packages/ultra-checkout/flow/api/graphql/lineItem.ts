@@ -2,9 +2,9 @@ import { query } from './query';
 import { gql } from '@apollo/client';
 
 const ADD_LINE_ITEM = gql`
-  mutation addLineItem(orderNumber: String, item: CartLineItemInput) {
-   orderLineItemAdd(number: $orderNumber, item: $item) {
-     orderMode
+  mutation addLineItem($orderNumber: String, $item: CartLineItemInput) {
+    orderLineItemAdd(number: $orderNumber, item: $item) {
+      orderMode
       shippingAddress {
         city
         line1: address1
@@ -14,32 +14,32 @@ const ADD_LINE_ITEM = gql`
 `;
 
 const REMOVE_LINE_ITEM = gql`
-  mutation removeLineItem(orderNumber: String, item: CartLineItemInput) {
-   orderLineItemRemove(number: $orderNumber, item: $item) {
-     orderMode
-     lineItems {
-       ... on OrderLineItem {
-         imageUrl
-         name
-         coreAttribute
-       }
-     }
+  mutation removeLineItem($orderNumber: String, $item: CartLineItemInput) {
+    orderLineItemRemove(number: $orderNumber, item: $item) {
+      orderMode
+      lineItems {
+        ... on OrderLineItem {
+          imageUrl
+          name
+          coreAttribute
+        }
+      }
     }
   }
 `;
 
 const UPDATE_LINE_ITEM = gql`
-  mutation editLineItem(orderNumber: String, item: CartLineItemInput) {
-   orderLineItemEdit(number: $orderNumber, item: $item) {
-    orderMode
-     lineItems {
-       ... on OrderLineItem {
-         imageUrl
-         name
-         coreAttribute
-       }
-     }
-  }
+  mutation editLineItem($orderNumber: String, $item: CartLineItemInput) {
+    orderLineItemEdit(number: $orderNumber, item: $item) {
+      orderMode
+      lineItems {
+        ... on OrderLineItem {
+          imageUrl
+          name
+          coreAttribute
+        }
+      }
+    }
   }
 `;
 export const lineItem = {

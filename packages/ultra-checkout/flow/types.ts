@@ -8,6 +8,8 @@ export enum Step {
 
 export type Address = {
   city?: string;
+  line1?: string;
+  line2: string;
 };
 export type PaymentMethod = {
   id?: string;
@@ -37,11 +39,12 @@ export interface CartValues {
 }
 
 export enum OrderMode {
-  MIX,
-  FLEX,
-  SWAP,
+  MIX = 'MIX',
+  FLEX = 'FLEX',
+  SWAP = 'SWAP',
 }
 
+// export type OrderMode = "MIX" | "FLEX" | "SWAP"
 export interface LineItem {
   variant: any;
   quantity: number;

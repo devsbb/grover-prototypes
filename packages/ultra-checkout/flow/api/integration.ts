@@ -11,7 +11,7 @@ type APIError = { error: any };
 
 type Operation<R> = (
   order: CartOrder<OrderMode>,
-  event?: { value: R }
+  event?: R
 ) => Promise<APISuccess | APIError>;
 
 export type APISelection<R> = {

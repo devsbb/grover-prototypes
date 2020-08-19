@@ -22,12 +22,11 @@ const sendUpdate = (step, send) => {
 
 export const CheckoutBase = ({ checkout, children }) => {
   const [current, send] = useMachine(checkout);
-
   return (
     <section>
       <ScaffoldHeader>
         {children}
-        <span>Step: {current.value}</span>
+        <span>Step: {JSON.stringify(current.value)}</span>
         <ItemList order={current.context.order} />
       </ScaffoldHeader>
       <ScaffoldBlinkGrid>
@@ -37,12 +36,6 @@ export const CheckoutBase = ({ checkout, children }) => {
           onClick={() => send('STEP_CHANGE')}
         >
           Step!
-        </button>
-        <button
-          disabled={!current.matches('idle')}
-          onClick={() => send('create')}
-        >
-          Create!
         </button>
       </ScaffoldBlinkGrid>
       {current.matches('idle') && <div>Idling...</div>}
@@ -62,7 +55,13 @@ export const CheckoutBase = ({ checkout, children }) => {
           send={send}
         />
       )}
-      {current.matches('payment') && <Payment />}
+      {current.matches('payment') && (
+        <Payment
+          sendUpdate={sendUpdate}
+          data={current.context.order.shippingAddress}
+          send={send}
+        />
+      )}
       {current.matches('review') && (
         <Review
           sendUpdate={sendUpdate}

@@ -3,7 +3,17 @@ export const ShippingAddress = ({ data, send, sendUpdate }) => {
   return (
     <div>
       ShippingAddress
-      <form onSubmit={() => send('STEP_CHANGE')}>
+      <form
+        onSubmit={() =>
+          send('SUBMIT', {
+            value: {
+              payload: data,
+              entity: 'shippingAddress',
+              operation: 'add',
+            },
+          })
+        }
+      >
         <label htmlFor="city">
           City
           <input
@@ -22,6 +32,16 @@ export const ShippingAddress = ({ data, send, sendUpdate }) => {
             onChange={(e) => update('line1', e)}
           />
         </label>
+        <label htmlFor="line2">
+          Line2/Address2
+          <input
+            id="line2"
+            name="line2"
+            value={data.line2 || ''}
+            onChange={(e) => update('line2', e)}
+          />
+        </label>
+        <input type="submit" value="submit" />
       </form>
     </div>
   );
