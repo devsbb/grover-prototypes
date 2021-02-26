@@ -1,0 +1,40 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Merchant {
+  id       Int                   @default(autoincrement()) @id
+  code     String                @unique
+  name     String?
+  features FeaturesOnMerchants[]
+}
+
+model Feature {
+  id        Int                   @default(autoincrement()) @id
+  merchants FeaturesOnMerchants[]
+  type      String
+  active    Boolean
+}
+
+model FeaturesOnMerchants {
+  merchant   Merchant      @relation(fields: [merchantId], references: [id])
+  feature    Feature       @relation(fields: [featureId], references: [id])
+  merchantId Int
+  featureId  Int
+  active     Boolean
+  createdAt  DateTime      @default(now())
+  config     FeatureConfig @relation(fields: [configId], references: [id])
+  configId   Int
+
+  @@id([merchantId, featureId])
+}
+
+model FeatureConfig {
+  id    Int    @default(autoincrement()) @id
+  value String
+}
